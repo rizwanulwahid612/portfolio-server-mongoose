@@ -1,40 +1,18 @@
 //import { IAcademicSemester } from "../academicSemester/academicSemester.interface";
 import { User } from './user.model';
 
-export const findLastCustomerId = async (): Promise<string | undefined> => {
-  const lastCustomer = await User.findOne(
-    { role: 'customer' },
-    { id: 1, _id: 0 },
-  )
-    .sort({
-      createdAt: -1,
-    })
-    .lean();
-
-  return lastCustomer?.id ? lastCustomer.id.substring(2) : undefined;
-};
-
-export const generateCustomerId = async (): Promise<string> => {
-  const currentId =
-    (await findLastCustomerId()) || (0).toString().padStart(5, '0');
-  let incrementedId = (parseInt(currentId) + 1).toString().padStart(5, '0');
-  incrementedId = `C-${incrementedId}`;
-
-  return incrementedId;
-};
-export const findLastAdminId = async (): Promise<string | undefined> => {
-  const lastAdmin = await User.findOne({ role: 'admin' }, { id: 1, _id: 0 })
+export const findLastUserId = async (): Promise<string | undefined> => {
+  const lastUser = await User.findOne({ role: 'user' }, { id: 1, _id: 0 })
     .sort({ createdAt: -1 })
     .lean();
 
-  return lastAdmin?.id ? lastAdmin.id.substring(2) : undefined;
+  return lastUser?.id ? lastUser.id.substring(2) : undefined;
 };
 
-export const generateAdminId = async (): Promise<string> => {
-  const currentId =
-    (await findLastAdminId()) || (0).toString().padStart(5, '0');
+export const generateUserId = async (): Promise<string> => {
+  const currentId = (await findLastUserId()) || (0).toString().padStart(5, '0');
   let incrementedId = (parseInt(currentId) + 1).toString().padStart(5, '0');
-  incrementedId = `A-${incrementedId}`;
+  incrementedId = `U-${incrementedId}`;
 
   return incrementedId;
 };

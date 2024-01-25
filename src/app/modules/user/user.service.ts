@@ -3,52 +3,38 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import config from '../../../config/index';
 import ApiError from '../../../errors/ApiError';
-import { IAdmin } from '../admin/admin.interface';
-import { Admin } from '../admin/admin.model';
+//import { IAdmin } from '../admin/admin.interface';
+//import { Admin } from '../admin/admin.model';
 
 import { IUser } from './user.interface';
 import { User } from './user.model';
-import { generateAdminId } from './user.utils';
+import { generateUserId } from './user.utils';
+//import { generateAdminId } from './user.utils';
 
-const createAdmin = async (
-  admin: IAdmin,
-  user: IUser,
-): Promise<IUser | null> => {
-  if (!user || !admin) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'User or Admin data is missing');
+const createUser = async (user: IUser): Promise<IUser | null> => {
+  if (!user) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User data is missing');
   }
-  // default password
   if (!user.password) {
-    user.password = config.default_admin_pass as string;
+    user.password = config.default_user_pass as string;
   }
+  user.role = 'user';
 
-  // set role
-  user.role = 'admin';
-
-  // generate faculty id
+  // generate admin id
   let newUserAllData = null;
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
 
-    const id = await generateAdminId();
+    const id = await generateUserId();
     user.id = id;
-    admin.id = id;
-
-    const newAdmin = await Admin.create([admin], { session });
-
-    if (!newAdmin.length) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create admin ');
-    }
-
-    user.admin = newAdmin[0]._id;
 
     const newUser = await User.create([user], { session });
 
     if (!newUser.length) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create admin/user');
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create user');
     }
-    newUserAllData = newUser[0];
+    newUserAllData = newUser[0]._id;
 
     await session.commitTransaction();
     await session.endSession();
@@ -57,21 +43,12 @@ const createAdmin = async (
     await session.endSession();
     throw error;
   }
-
   if (newUserAllData) {
-    newUserAllData = await User.findOne({ id: newUserAllData.id }).populate({
-      path: 'admin',
-      populate: [
-        {
-          path: 'managementDepartment',
-        },
-      ],
-    });
+    newUserAllData = await User.findOne({ id: newUserAllData.id });
   }
-
   return newUserAllData;
 };
 
 export const UserService = {
-  createAdmin,
+  createUser,
 };

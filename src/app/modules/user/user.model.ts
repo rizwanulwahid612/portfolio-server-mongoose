@@ -15,6 +15,19 @@ const UserSchema = new Schema<IUser, UserModel>(
       type: String,
       required: true,
     },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       required: true,
@@ -23,15 +36,6 @@ const UserSchema = new Schema<IUser, UserModel>(
     needsPasswordChange: {
       type: Boolean,
       default: true,
-    },
-
-    customer: {
-      type: Schema.Types.ObjectId,
-      ref: 'Customer',
-    },
-    admin: {
-      type: Schema.Types.ObjectId,
-      ref: 'Admin',
     },
   },
   {
@@ -46,11 +50,25 @@ UserSchema.statics.isUserExist = async function (
   id: string,
 ): Promise<Pick<
   IUser,
-  'id' | 'password' | 'role' | 'needsPasswordChange'
+  | 'id'
+  | 'email'
+  | 'password'
+  | 'role'
+  | 'needsPasswordChange'
+  | 'image'
+  | 'name'
 > | null> {
   return await User.findOne(
     { id },
-    { id: 1, password: 1, role: 1, needsPasswordChange: 1 },
+    {
+      id: 1,
+      email: 1,
+      password: 1,
+      role: 1,
+      needsPasswordChange: 1,
+      image: 1,
+      name: 1,
+    },
   );
 };
 
