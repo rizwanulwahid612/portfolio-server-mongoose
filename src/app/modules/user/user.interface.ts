@@ -15,7 +15,7 @@ export type IUser = {
 
 export type UserModel = {
   isUserExist(
-    id: string,
+    email: string,
   ): Promise<
     Pick<
       IUser,

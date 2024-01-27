@@ -14,5 +14,9 @@ router.post(
   //auth(ENUM_USER_ROLE.USER),
   UserController.createUser,
 );
-
+router.get(
+  '/',
+  //auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  UserController.getAllUsers,
+);
 export const UserRoutes = router;

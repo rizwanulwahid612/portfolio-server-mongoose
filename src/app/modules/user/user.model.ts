@@ -47,7 +47,8 @@ const UserSchema = new Schema<IUser, UserModel>(
 );
 
 UserSchema.statics.isUserExist = async function (
-  id: string,
+  //id: string,
+  email: string,
 ): Promise<Pick<
   IUser,
   | 'id'
@@ -59,7 +60,7 @@ UserSchema.statics.isUserExist = async function (
   | 'name'
 > | null> {
   return await User.findOne(
-    { id },
+    { email },
     {
       id: 1,
       email: 1,
