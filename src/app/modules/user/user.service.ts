@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
-import mongoose, { SortOrder } from 'mongoose';
+import mongoose, { SortOrder, Types } from 'mongoose';
 import config from '../../../config/index';
 import ApiError from '../../../errors/ApiError';
 //import { IAdmin } from '../admin/admin.interface';
@@ -14,6 +14,7 @@ import { IPaginationOptions } from '../../../interfaces/pagination';
 import { IGenericResponse } from '../../../interfaces/common';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { userSearchableFields } from './user.constant';
+import { sendEmail } from '../auth/sendResetMail';
 //import { generateAdminId } from './user.utils';
 
 const createUser = async (user: IUser): Promise<IUser | null> => {
@@ -52,6 +53,11 @@ const createUser = async (user: IUser): Promise<IUser | null> => {
     newUserAllData = await User.findOne({ email: newUserAllData.id });
   }
   return newUserAllData;
+};
+const getSingleUsers = async (id: string): Promise<IUser | null> => {
+  const result = await User.findOne({ _id: new Types.ObjectId(id) });
+
+  return result;
 };
 const getAllUsers = async (
   filters: IUser,
@@ -112,7 +118,41 @@ const getAllUsers = async (
     data: result,
   };
 };
+const updateUser = async (
+  id: string,
+  payload: Partial<IUser>,
+): Promise<IUser | null> => {
+  const result = await User.findOneAndUpdate(
+    { _id: new Types.ObjectId(id) },
+    payload,
+    {
+      new: true,
+    },
+  );
+  return result;
+};
+type IContact = {
+  name: string;
+  email: string;
+  description: string;
+};
+const createContact = async (contact: IContact) => {
+  await sendEmail(
+    `${process.env.EMAIL}`,
+    `
+      <div>
+        <p>User Name, ${contact.name}</p>
+        <p>User Mail, ${contact.email}</p>
+        <p>Description:, ${contact.description}</p>
+        <p>Thank you</p>
+      </div>
+  `,
+  );
+};
 export const UserService = {
   createUser,
+  getSingleUsers,
   getAllUsers,
+  updateUser,
+  createContact,
 };

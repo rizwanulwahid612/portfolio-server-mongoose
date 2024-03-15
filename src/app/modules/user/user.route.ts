@@ -9,6 +9,12 @@ import { UserController } from './user.controller';
 const router = express.Router();
 
 router.post(
+  '/create-contact',
+  //validateRequest(UserValidation.createUserZodSchema),
+  //auth(ENUM_USER_ROLE.USER),
+  UserController.createContact,
+);
+router.post(
   '/create-user',
   //validateRequest(UserValidation.createUserZodSchema),
   //auth(ENUM_USER_ROLE.USER),
@@ -18,5 +24,16 @@ router.get(
   '/',
   //auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   UserController.getAllUsers,
+);
+router.get(
+  '/:id',
+  //auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  UserController.getSingleUser,
+);
+router.patch(
+  '/:id',
+  // validateRequest(CategoryValidation.updateCategory),
+  // auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  UserController.updateUser,
 );
 export const UserRoutes = router;

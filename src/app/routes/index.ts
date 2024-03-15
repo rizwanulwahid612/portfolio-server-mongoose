@@ -1,7 +1,11 @@
 import express from 'express';
 import { AuthRoutes } from '../modules/auth/auth.route';
 import { UserRoutes } from '../modules/user/user.route';
-import { ProductsRoutes } from '../modules/products/products.route';
+import { FrameworksRoutes } from '../modules/framework/framework.route';
+import { ProjectRoutes } from '../modules/projects/project.route';
+import { SkillRoutes } from '../modules/skills/skills.route';
+import { ExperianceRoutes } from '../modules/experiance/experiance.route';
+import { AchivementRoutes } from '../modules/achivement/achivement.route';
 
 const router = express.Router();
 
@@ -15,8 +19,24 @@ const moduleRoutes = [
     route: UserRoutes,
   },
   {
-    path: '/products',
-    route: ProductsRoutes,
+    path: '/framework',
+    route: FrameworksRoutes,
+  },
+  {
+    path: '/project',
+    route: ProjectRoutes,
+  },
+  {
+    path: '/skill',
+    route: SkillRoutes,
+  },
+  {
+    path: '/experiance',
+    route: ExperianceRoutes,
+  },
+  {
+    path: '/achivement',
+    route: AchivementRoutes,
   },
 ];
 
