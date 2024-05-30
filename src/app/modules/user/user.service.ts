@@ -149,10 +149,32 @@ const createContact = async (contact: IContact) => {
   `,
   );
 };
+const deleteUser = async (id: string): Promise<IUser | null> => {
+  // Check if the admin exists
+  const isExist = await User.findOne({ _id: new Types.ObjectId(id) });
+
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user did not found!');
+  }
+
+  // eslint-disable-next-line no-useless-catch
+  try {
+    // Delete the admin
+    const result = await User.findOneAndDelete({
+      _id: new Types.ObjectId(id),
+    });
+
+    return result;
+  } catch (error: any) {
+    // Handle errors appropriately
+    throw error.message;
+  }
+};
 export const UserService = {
   createUser,
   getSingleUsers,
   getAllUsers,
   updateUser,
   createContact,
+  deleteUser,
 };

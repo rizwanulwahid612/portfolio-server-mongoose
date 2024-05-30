@@ -10,7 +10,7 @@ import { ExperianceController } from './experiance.controller';
 
 const router = express.Router();
 router.post(
-  '/create-achivement',
+  '/create-experiance',
   // validateRequest(CategoryValidation.postCategory),
   // auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   ExperianceController.createExperiance,

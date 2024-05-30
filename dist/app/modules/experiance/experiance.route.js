@@ -14,7 +14,7 @@ const experiance_controller_1 = require("./experiance.controller");
 // import { ServiceController } from './service.controller';
 // import { ServiceValidation } from './service.validation';
 const router = express_1.default.Router();
-router.post('/create-achivement', 
+router.post('/create-experiance', 
 // validateRequest(CategoryValidation.postCategory),
 // auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
 experiance_controller_1.ExperianceController.createExperiance);

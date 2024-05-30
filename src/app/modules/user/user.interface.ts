@@ -2,7 +2,11 @@
 import { Model } from 'mongoose';
 //import { IAdmin } from '../admin/admin.interface';
 //import { ICustomer } from '../customer/customer.interface';
-
+export type Iimgs = {
+  imgs?: string;
+  public_id?: string;
+  secure_url?: string;
+};
 export type IUser = {
   id: string;
   role: string;
@@ -37,7 +41,8 @@ export type IUser = {
   twitter?: string;
   github?: string;
   website?: string;
-  image: string;
+  imagess?: Iimgs[];
+  //image?: string;
   aboutme?: string;
   marriedstatus?: string;
   nid?: string;
@@ -58,6 +63,15 @@ export type IUser = {
   gender?: string;
   password: string;
   needsPasswordChange: true | false;
+  cv?: string;
+  resume?: string;
+  features?: string;
+  framework?: string;
+  technologyFor?: string;
+  trainningcenter?: string;
+  front?: string;
+  back?: string;
+  tool?: string;
 };
 
 export type UserModel = {
@@ -71,8 +85,8 @@ export type UserModel = {
       | 'role'
       | 'needsPasswordChange'
       | 'email'
-      | 'image'
       | 'name'
+      | 'imagess'
       | 'aboutme'
       | 'achivement'
       | 'backend'
@@ -120,6 +134,15 @@ export type UserModel = {
       | 'youtube'
       | 'discord'
       | 'twitter'
+      | 'back'
+      | 'cv'
+      | 'features'
+      | 'framework'
+      | 'front'
+      | 'resume'
+      | 'technologyFor'
+      | 'tool'
+      | 'trainningcenter'
     >
   >;
   isPasswordMatched(

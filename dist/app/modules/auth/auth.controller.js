@@ -62,7 +62,7 @@ const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     });
 }));
 const changePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
+    const user = req.body;
     const passwordData = __rest(req.body, []);
     yield auth_service_1.AuthService.changePassword(user, passwordData);
     (0, sendResponse_1.default)(res, {
@@ -80,9 +80,9 @@ const forgotPass = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers.authorization || '';
-    yield auth_service_1.AuthService.resetPassword(req.body, token);
-    // await AuthService.resetPassword(req.body);
+    //const token = req.headers.authorization || '';
+    // await AuthService.resetPassword(req.body, token);
+    yield auth_service_1.AuthService.resetPassword(req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,

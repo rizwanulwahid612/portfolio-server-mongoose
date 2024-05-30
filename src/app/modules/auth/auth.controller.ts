@@ -58,7 +58,6 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
     message: 'Password changed successfully !',
   });
 });
-
 const forgotPass = catchAsync(async (req: Request, res: Response) => {
   await AuthService.forgotPass(req.body);
 
@@ -68,17 +67,40 @@ const forgotPass = catchAsync(async (req: Request, res: Response) => {
     message: 'Check your email!',
   });
 });
+//original
+// const forgotPass = catchAsync(async (req: Request, res: Response) => {
+//   await AuthService.forgotPass(req.body);
+
+//   sendResponse(res, {
+//     statusCode: 200,
+//     success: true,
+//     message: 'Check your email!',
+//   });
+// });
 
 const resetPassword = catchAsync(async (req: Request, res: Response) => {
-  //const token = req.headers.authorization || '';
+  const token = req.headers.authorization || '';
   // await AuthService.resetPassword(req.body, token);
-  await AuthService.resetPassword(req.body);
+  console.log(req.body, token);
+
+  await AuthService.resetPassword(req.body, token);
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: 'Account recovered!',
   });
 });
+//original
+// const resetPassword = catchAsync(async (req: Request, res: Response) => {
+//   //const token = req.headers.authorization || '';
+//   // await AuthService.resetPassword(req.body, token);
+//   await AuthService.resetPassword(req.body);
+//   sendResponse(res, {
+//     statusCode: 200,
+//     success: true,
+//     message: 'Account recovered!',
+//   });
+// });
 export const AuthController = {
   loginUser,
   refreshToken,

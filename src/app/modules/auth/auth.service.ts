@@ -140,7 +140,7 @@ const forgotPass = async (payload: { email: string }) => {
   if (user.role === ENUM_USER_ROLE.USER) {
     profile = await User.findOne({ email: user.email });
   }
-
+  console.log(user, profile);
   if (!profile) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Pofile not found!');
   }
@@ -150,14 +150,15 @@ const forgotPass = async (payload: { email: string }) => {
   }
 
   const passResetToken = await jwtHelpers.createResetToken(
-    { email: user.email },
+    { email: user.email, role: user.role },
     config.jwt.secret as string,
+    // config.jwt.secret as Secret,
     '50m',
   );
 
   const resetLink: string =
-    config.resetlink +
-    `/reset-password?email=${user.email}&token=${passResetToken}`;
+    config.resetlink + `email=${user.email}&token=${passResetToken}`;
+  console.log('Link', resetLink);
 
   console.log('profile: ', profile, 'resetLink:', resetLink);
   await sendEmail(
@@ -171,35 +172,109 @@ const forgotPass = async (payload: { email: string }) => {
   `,
   );
 
-  // return {
-  //   message: "Check your email!"
-  // }
+  return {
+    message: 'Check your email!',
+  };
 };
+//original one
+// const forgotPass = async (payload: { email: string }) => {
+//   const user = await User.findOne(
+//     { email: payload.email },
+//     { email: 1, role: 1 },
+//   );
 
+//   if (!user) {
+//     throw new ApiError(httpStatus.BAD_REQUEST, 'User does not exist!');
+//   }
+
+//   let profile = null;
+//   if (user.role === ENUM_USER_ROLE.USER) {
+//     profile = await User.findOne({ email: user.email });
+//   }
+
+//   if (!profile) {
+//     throw new ApiError(httpStatus.BAD_REQUEST, 'Pofile not found!');
+//   }
+
+//   if (!profile.email) {
+//     throw new ApiError(httpStatus.BAD_REQUEST, 'Email not found!');
+//   }
+
+//   const passResetToken = await jwtHelpers.createResetToken(
+//     { email: user.email },
+//     config.jwt.secret as string,
+//     '50m',
+//   );
+
+//   const resetLink: string =
+//     config.resetlink +
+//     `/reset-password?email=${user.email}&token=${passResetToken}`;
+
+//   console.log('profile: ', profile, 'resetLink:', resetLink);
+//   await sendEmail(
+//     profile.email,
+//     `
+//       <div>
+//         <p>Hi, ${profile.name}</p>
+//         <p>Your password reset link: <a href=${resetLink}>Click Here</a></p>
+//         <p>Thank you</p>
+//       </div>
+//   `,
+//   );
+
+//   // return {
+//   //   message: "Check your email!"
+//   // }
+// };
 const resetPassword = async (
   payload: { email: string; newPassword: string },
-  //token: string,
-) =>
-  // payload: { id: string; newPassword: string },
-  // token: string,
-  {
-    const { email, newPassword } = payload;
-    const user = await User.findOne({ email }, { email: 1 });
-    if (!user) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!');
-    }
-    console.log(user);
-    // const isVarified = await jwtHelpers.verifyToken(
-    //   token,
-    //   config.jwt.secret as string,
-    // );
-    // console.log(isVarified);
-    const password = await bcrypt.hash(
-      newPassword,
-      Number(config.bycrypt_salt_rounds),
-    );
-    await User.updateOne({ email }, { password });
-  };
+  token: string,
+) => {
+  console.log('reset Pass', payload, token);
+  const { email, newPassword } = payload;
+  const user = await User.findOne({ email }, { email: 1 });
+  console.log(user);
+  if (!user) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!');
+  }
+  // console.log(user);
+  const isVarified = await jwtHelpers.verifyToken(
+    token,
+    config.jwt.secret as string,
+  );
+  console.log(isVarified);
+  const password = await bcrypt.hash(
+    newPassword,
+    Number(config.bycrypt_salt_rounds),
+  );
+  console.log(password);
+  await User.updateOne({ email }, { password });
+};
+//original
+// const resetPassword = async (
+//   payload: { email: string; newPassword: string },
+//   //token: string,
+// ) =>
+//   // payload: { id: string; newPassword: string },
+//   // token: string,
+//   {
+//     const { email, newPassword } = payload;
+//     const user = await User.findOne({ email }, { email: 1 });
+//     if (!user) {
+//       throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!');
+//     }
+//     console.log(user);
+//     // const isVarified = await jwtHelpers.verifyToken(
+//     //   token,
+//     //   config.jwt.secret as string,
+//     // );
+//     // console.log(isVarified);
+//     const password = await bcrypt.hash(
+//       newPassword,
+//       Number(config.bycrypt_salt_rounds),
+//     );
+//     await User.updateOne({ email }, { password });
+//   };
 export const AuthService = {
   loginUser,
   refreshToken,

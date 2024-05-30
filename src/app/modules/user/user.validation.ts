@@ -11,7 +11,14 @@ const createUserZodSchema = z.object({
         required_error: 'Email is required',
       })
       .email(),
-    image: z.string().optional(),
+    //  image: z.string().optional(),
+    // image: z
+    //   .array(
+    //     z.object({
+    //       imgs: z.string().optional(),
+    //     }),
+    //   )
+    //   .optional(),
   }),
 });
 

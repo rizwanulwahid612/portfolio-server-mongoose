@@ -2,8 +2,18 @@
 import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import config from '../../../config';
-import { IUser, UserModel } from './user.interface';
-
+import { Iimgs, IUser, UserModel } from './user.interface';
+const ImgsSchema = new Schema<Iimgs>({
+  imgs: {
+    type: String,
+  },
+  public_id: {
+    type: String,
+  },
+  secure_url: {
+    type: String,
+  },
+});
 const UserSchema = new Schema<IUser, UserModel>(
   {
     id: {
@@ -140,10 +150,16 @@ const UserSchema = new Schema<IUser, UserModel>(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
+    imagess: [
+      {
+        type: ImgsSchema, // This is an array of subdocuments
+      },
+    ],
+
+    // image: {
+    //   type: String,
+    //   required: true,
+    // },
     aboutme: {
       type: String,
       required: true,
@@ -216,6 +232,43 @@ const UserSchema = new Schema<IUser, UserModel>(
       type: String,
       required: false,
     },
+    back: {
+      type: String,
+      required: false,
+    },
+    cv: {
+      type: String,
+      required: false,
+    },
+
+    features: {
+      type: String,
+      required: false,
+    },
+    framework: {
+      type: String,
+      required: false,
+    },
+    front: {
+      type: String,
+      required: false,
+    },
+    resume: {
+      type: String,
+      required: false,
+    },
+    technologyFor: {
+      type: String,
+      required: false,
+    },
+    tool: {
+      type: String,
+      required: false,
+    },
+    trainningcenter: {
+      type: String,
+      required: false,
+    },
     password: {
       type: String,
       required: true,
@@ -242,9 +295,9 @@ UserSchema.statics.isUserExist = async function (
   | 'id'
   | 'email'
   | 'password'
+  | 'imagess'
   | 'role'
   | 'needsPasswordChange'
-  | 'image'
   | 'name'
   | 'experience1'
   | 'experience2'
@@ -293,6 +346,15 @@ UserSchema.statics.isUserExist = async function (
   | 'youtube'
   | 'discord'
   | 'twitter'
+  | 'back'
+  | 'cv'
+  | 'features'
+  | 'framework'
+  | 'front'
+  | 'resume'
+  | 'technologyFor'
+  | 'tool'
+  | 'trainningcenter'
 > | null> {
   return await User.findOne(
     { email },
@@ -352,6 +414,15 @@ UserSchema.statics.isUserExist = async function (
       youtube: 1,
       discord: 1,
       twitter: 1,
+      back: 1,
+      cv: 1,
+      features: 1,
+      framework: 1,
+      front: 1,
+      resume: 1,
+      technologyFor: 1,
+      tool: 1,
+      trainningcenter: 1,
     },
   );
 };

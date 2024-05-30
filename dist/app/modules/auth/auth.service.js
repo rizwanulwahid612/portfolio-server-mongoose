@@ -70,9 +70,9 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
         accessToken: newAccessToken,
     };
 });
-const changePassword = (user, 
-//user: IUser,
-payload) => __awaiter(void 0, void 0, void 0, function* () {
+const changePassword = (
+// user: JwtPayload | null,
+user, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { oldPassword, newPassword } = payload;
     // // checking is user exist
     //alternative way
@@ -121,15 +121,18 @@ const forgotPass = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     //   message: "Check your email!"
     // }
 });
-const resetPassword = (payload, token) => __awaiter(void 0, void 0, void 0, function* () {
+const resetPassword = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, newPassword } = payload;
     const user = yield user_model_1.User.findOne({ email }, { email: 1 });
     if (!user) {
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, 'User not found!');
     }
     console.log(user);
-    const isVarified = yield jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
-    console.log(isVarified);
+    // const isVarified = await jwtHelpers.verifyToken(
+    //   token,
+    //   config.jwt.secret as string,
+    // );
+    // console.log(isVarified);
     const password = yield bcrypt_1.default.hash(newPassword, Number(config_1.default.bycrypt_salt_rounds));
     yield user_model_1.User.updateOne({ email }, { password });
 });
