@@ -158,10 +158,30 @@ const createContact = (contact) => __awaiter(void 0, void 0, void 0, function* (
       </div>
   `);
 });
+const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    // Check if the admin exists
+    const isExist = yield user_model_1.User.findOne({ _id: new mongoose_1.Types.ObjectId(id) });
+    if (!isExist) {
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'user did not found!');
+    }
+    // eslint-disable-next-line no-useless-catch
+    try {
+        // Delete the admin
+        const result = yield user_model_1.User.findOneAndDelete({
+            _id: new mongoose_1.Types.ObjectId(id),
+        });
+        return result;
+    }
+    catch (error) {
+        // Handle errors appropriately
+        throw error.message;
+    }
+});
 exports.UserService = {
     createUser,
     getSingleUsers,
     getAllUsers,
     updateUser,
     createContact,
+    deleteUser,
 };

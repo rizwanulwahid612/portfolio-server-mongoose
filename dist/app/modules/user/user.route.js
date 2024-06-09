@@ -31,4 +31,7 @@ router.patch('/:id',
 // validateRequest(CategoryValidation.updateCategory),
 // auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
 user_controller_1.UserController.updateUser);
+router.delete('/:id', 
+// auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+user_controller_1.UserController.deleteUser);
 exports.UserRoutes = router;

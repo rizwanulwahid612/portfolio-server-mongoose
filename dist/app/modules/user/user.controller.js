@@ -84,10 +84,21 @@ const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result.data,
     });
 }));
+const deleteUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const result = yield user_service_1.UserService.deleteUser(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'User deleted successfully !',
+        data: result,
+    });
+}));
 exports.UserController = {
     createContact,
     createUser,
     getSingleUser,
     getAllUsers,
     updateUser,
+    deleteUser,
 };

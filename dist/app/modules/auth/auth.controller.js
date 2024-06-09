@@ -79,16 +79,37 @@ const forgotPass = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         message: 'Check your email!',
     });
 }));
+//original
+// const forgotPass = catchAsync(async (req: Request, res: Response) => {
+//   await AuthService.forgotPass(req.body);
+//   sendResponse(res, {
+//     statusCode: 200,
+//     success: true,
+//     message: 'Check your email!',
+//   });
+// });
 const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //const token = req.headers.authorization || '';
+    const token = req.headers.authorization || '';
     // await AuthService.resetPassword(req.body, token);
-    yield auth_service_1.AuthService.resetPassword(req.body);
+    console.log(req.body, token);
+    yield auth_service_1.AuthService.resetPassword(req.body, token);
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: 'Account recovered!',
     });
 }));
+//original
+// const resetPassword = catchAsync(async (req: Request, res: Response) => {
+//   //const token = req.headers.authorization || '';
+//   // await AuthService.resetPassword(req.body, token);
+//   await AuthService.resetPassword(req.body);
+//   sendResponse(res, {
+//     statusCode: 200,
+//     success: true,
+//     message: 'Account recovered!',
+//   });
+// });
 exports.AuthController = {
     loginUser,
     refreshToken,

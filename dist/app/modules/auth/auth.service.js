@@ -100,15 +100,18 @@ const forgotPass = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (user.role === user_1.ENUM_USER_ROLE.USER) {
         profile = yield user_model_1.User.findOne({ email: user.email });
     }
+    console.log(user, profile);
     if (!profile) {
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, 'Pofile not found!');
     }
     if (!profile.email) {
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, 'Email not found!');
     }
-    const passResetToken = yield jwtHelpers_1.jwtHelpers.createResetToken({ email: user.email }, config_1.default.jwt.secret, '50m');
-    const resetLink = config_1.default.resetlink +
-        `/reset-password?email=${user.email}&token=${passResetToken}`;
+    const passResetToken = yield jwtHelpers_1.jwtHelpers.createResetToken({ email: user.email, role: user.role }, config_1.default.jwt.secret, 
+    // config.jwt.secret as Secret,
+    '5m');
+    const resetLink = config_1.default.resetlink + `email=${user.email}&token=${passResetToken}`;
+    console.log('Link', resetLink);
     console.log('profile: ', profile, 'resetLink:', resetLink);
     yield (0, sendResetMail_1.sendEmail)(profile.email, `
       <div>
@@ -117,25 +120,92 @@ const forgotPass = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         <p>Thank you</p>
       </div>
   `);
-    // return {
-    //   message: "Check your email!"
-    // }
+    return {
+        message: 'Check your email!',
+    };
 });
-const resetPassword = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+//original one
+// const forgotPass = async (payload: { email: string }) => {
+//   const user = await User.findOne(
+//     { email: payload.email },
+//     { email: 1, role: 1 },
+//   );
+//   if (!user) {
+//     throw new ApiError(httpStatus.BAD_REQUEST, 'User does not exist!');
+//   }
+//   let profile = null;
+//   if (user.role === ENUM_USER_ROLE.USER) {
+//     profile = await User.findOne({ email: user.email });
+//   }
+//   if (!profile) {
+//     throw new ApiError(httpStatus.BAD_REQUEST, 'Pofile not found!');
+//   }
+//   if (!profile.email) {
+//     throw new ApiError(httpStatus.BAD_REQUEST, 'Email not found!');
+//   }
+//   const passResetToken = await jwtHelpers.createResetToken(
+//     { email: user.email },
+//     config.jwt.secret as string,
+//     '50m',
+//   );
+//   const resetLink: string =
+//     config.resetlink +
+//     `/reset-password?email=${user.email}&token=${passResetToken}`;
+//   console.log('profile: ', profile, 'resetLink:', resetLink);
+//   await sendEmail(
+//     profile.email,
+//     `
+//       <div>
+//         <p>Hi, ${profile.name}</p>
+//         <p>Your password reset link: <a href=${resetLink}>Click Here</a></p>
+//         <p>Thank you</p>
+//       </div>
+//   `,
+//   );
+//   // return {
+//   //   message: "Check your email!"
+//   // }
+// };
+const resetPassword = (payload, token) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('reset Pass', payload, token);
     const { email, newPassword } = payload;
     const user = yield user_model_1.User.findOne({ email }, { email: 1 });
+    console.log(user);
     if (!user) {
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, 'User not found!');
     }
-    console.log(user);
-    // const isVarified = await jwtHelpers.verifyToken(
-    //   token,
-    //   config.jwt.secret as string,
-    // );
-    // console.log(isVarified);
+    // console.log(user);
+    const isVarified = yield jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
+    console.log(isVarified);
     const password = yield bcrypt_1.default.hash(newPassword, Number(config_1.default.bycrypt_salt_rounds));
+    console.log(password);
     yield user_model_1.User.updateOne({ email }, { password });
 });
+//original
+// const resetPassword = async (
+//   payload: { email: string; newPassword: string },
+//   //token: string,
+// ) =>
+//   // payload: { id: string; newPassword: string },
+//   // token: string,
+//   {
+//     const { email, newPassword } = payload;
+//     const user = await User.findOne({ email }, { email: 1 });
+//     if (!user) {
+//       throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!');
+//     }
+//     console.log(user);
+//     // const isVarified = await jwtHelpers.verifyToken(
+//     //   token,
+//     //   config.jwt.secret as string,
+//     // );
+//     // console.log(isVarified);
+//     const password = await bcrypt.hash(
+//       newPassword,
+//       Number(config.bycrypt_salt_rounds),
+//     );
+//     await User.updateOne({ email }, { password });
+//   };
 exports.AuthService = {
     loginUser,
     refreshToken,

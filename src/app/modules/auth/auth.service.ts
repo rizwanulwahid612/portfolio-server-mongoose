@@ -153,7 +153,7 @@ const forgotPass = async (payload: { email: string }) => {
     { email: user.email, role: user.role },
     config.jwt.secret as string,
     // config.jwt.secret as Secret,
-    '50m',
+    '5m',
   );
 
   const resetLink: string =

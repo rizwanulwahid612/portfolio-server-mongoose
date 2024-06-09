@@ -1,5 +1,7 @@
 import express from 'express';
 import { SkillController } from './skills.controller';
+import { ENUM_USER_ROLE } from '../../../enums/user';
+import auth from '../../middlewares/auth';
 //import { ENUM_USER_ROLE } from '../../../enums/user';
 //import auth from '../../middlewares/auth';
 //import validateRequest from '../../middlewares/validateRequest';
@@ -12,7 +14,7 @@ const router = express.Router();
 router.post(
   '/create-skill',
   // validateRequest(CategoryValidation.postCategory),
-  // auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  auth(ENUM_USER_ROLE.USER),
   SkillController.createSkill,
 );
 router.get(

@@ -13,7 +13,14 @@ const createUserZodSchema = zod_1.z.object({
             required_error: 'Email is required',
         })
             .email(),
-        image: zod_1.z.string().optional(),
+        //  image: z.string().optional(),
+        // image: z
+        //   .array(
+        //     z.object({
+        //       imgs: z.string().optional(),
+        //     }),
+        //   )
+        //   .optional(),
     }),
 });
 exports.UserValidation = {
