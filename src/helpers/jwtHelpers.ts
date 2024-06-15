@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import jwt, { Secret, verify } from 'jsonwebtoken';
+import jwt, { JwtPayload, Secret, verify } from 'jsonwebtoken';
 import ApiError from '../errors/ApiError';
 import httpStatus from 'http-status';
 
@@ -25,10 +25,10 @@ const createResetToken = (
 // const verifyToken = (token: string, secret: Secret): JwtPayload => {
 //   return jwt.verify(token, secret) as JwtPayload;
 //};
-const verifyToken = (token: string, secret: Secret) => {
+const verifyToken = (token: string, secret: Secret): JwtPayload => {
   try {
-    const isVerfied = verify(token, secret);
-    return isVerfied as any;
+    const isVerfied = verify(token, secret) as JwtPayload;
+    return isVerfied as JwtPayload;
   } catch (error) {
     return new ApiError(httpStatus.UNAUTHORIZED, 'Invalid token');
   }

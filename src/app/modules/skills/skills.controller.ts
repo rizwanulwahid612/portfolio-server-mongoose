@@ -12,7 +12,8 @@ import { ISkill } from './skills.interface';
 const createSkill = catchAsync(async (req: Request, res: Response) => {
   const { ...data } = req.body;
   const result = await SkillService.createSkill(data);
-
+  console.log(req.headers.authorization);
+  console.log(req.user);
   sendResponse<ISkill>(res, {
     statusCode: httpStatus.OK,
     success: true,

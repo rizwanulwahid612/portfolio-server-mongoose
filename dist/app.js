@@ -9,10 +9,12 @@ const http_status_1 = __importDefault(require("http-status"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 const routes_1 = __importDefault(require("./app/routes"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const config_1 = __importDefault(require("./config"));
 //import config from './config';
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: `${process.env.FRONTEND_URL}`,
+    origin: `${config_1.default.frontend_url}`,
+    // origin: `${process.env.FRONTEND_URL}`,
     credentials: true,
 }));
 app.use((0, cookie_parser_1.default)());

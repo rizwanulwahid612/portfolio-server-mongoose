@@ -5,13 +5,15 @@ import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import routes from './app/routes';
 
 import cookieParser from 'cookie-parser';
+import config from './config';
 //import config from './config';
 
 const app: Application = express();
 
 app.use(
   cors({
-    origin: `${process.env.FRONTEND_URL}`,
+    origin: `${config.frontend_url}`,
+    // origin: `${process.env.FRONTEND_URL}`,
     credentials: true,
   }),
 );

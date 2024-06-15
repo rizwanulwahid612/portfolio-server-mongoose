@@ -36,6 +36,7 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
     const cookieOptions = {
         secure: config_1.default.env === 'production',
         httpOnly: true,
+        // httpOnly: false,
     };
     res.cookie('refreshToken', refreshToken, cookieOptions);
     (0, sendResponse_1.default)(res, {

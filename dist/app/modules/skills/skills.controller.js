@@ -35,6 +35,8 @@ const skills_constant_1 = require("./skills.constant");
 const createSkill = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const data = __rest(req.body, []);
     const result = yield skills_service_1.SkillService.createSkill(data);
+    console.log(req.headers.authorization);
+    console.log(req.user);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
